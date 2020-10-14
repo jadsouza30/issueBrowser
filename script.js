@@ -16,8 +16,10 @@ var params={
 };
 
 function loadData(filtered){
-  //data already in cahce
+
+  //if filtered==true, new search paramters so have to reload all data
   if(!filtered){
+    //data already in cahce
     if(params.page>=params.low && params.page<=params.high){
       loadTable();
       return;
@@ -49,9 +51,9 @@ function loadData(filtered){
           loadTable();
       },
 
-      //alert user to errors form request
-      failure: function(error){
-        alert("invalid search parameters");
+      //alert user to errors form request if any
+      error: function(xhr, status, error) {
+        alert('invalid search parameters');
       }
   });
 }
@@ -62,7 +64,7 @@ function getQueries(data,page,rowsPerPage){
 
   //return 10 queries for correct page
   params.displayedData=params.data.slice(start,end);
-  return params.data.slice(start,end);
+  return params.displayedData;
 }
 
 function handleButtons(){
@@ -123,7 +125,7 @@ function loadTable() {
 
         var row = `<tr>
                   <td>
-                    <button class="issueSelector btn btn-rounded btn-success"><i class="fas fa-plus pl-1"></i></button>
+                    <button value="${i}" class="issueSelector btn btn-rounded btn-success"><i class="fas fa-plus pl-1"></i></button>
                   </td>
                   <td>${newQueries[i].number}&nbsp</td>
                   <td>${newQueries[i].user.login}</td>
@@ -135,11 +137,16 @@ function loadTable() {
     }
 
     $('.issueSelector').on('click', function() {
+          var issue=params.displayedData[Number($(this).val())];
+          $('#issueNum').html(`#${issue.number}`);
+          $('#issueTitle').html(issue.title);
+          $('#issueUser').html(issue.user.login);
+          $('#issueDescription').html(issue.body);
+          $('#issueTime').html(issue.created_at);
           $('#myModal').modal('show');
-          var issue=displayedData[$(this).val()];
-          $('#issueNum').html();
     });
 
+    //update search paramters
     $('#filter').on('click', function() {
           params.sort=$('#sort').val();
           params.state=$('#state').val();

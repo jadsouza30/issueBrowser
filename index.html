@@ -39,8 +39,11 @@
 
       -->
 
-
+    <h1 class="justify-content-center">Issues for Walmart's Thorax Repo</h1>
     <table class="table table-hover" id="issueTable">
+      <caption>
+
+      </caption>
       <form>
         <label for="sort">Sort By:&nbsp</label>
         <select id="sort" name="sort">
@@ -75,7 +78,7 @@
     </table>
 </div>
 
-<div class="container justify-content-center">
+<div class="container d-flex justify-content-center">
     <div id="buttonWrapper"></div>
 </div>
 
@@ -88,11 +91,60 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title"></h4>
+        <h4 class="modal-title" id="issueNum">
+          Testing
+        </h4>
       </div>
       <div class="modal-body">
-        <p id="issueNum"></p>
+
+        <div class='row'>
+
+          <div class="col-md-6 ">
+            <div> Title</div>
+          </div>
+          <div class="col-md-6">
+            <div id="issueTitle"> Title </div>
+          </div>
+
+        </div>
+
+        <div class='row'>
+
+          <div class="col-md-6">
+            <div> User</div>
+          </div>
+          <div class="col-md-6">
+            <div id="issueUser"> Title </div>
+          </div>
+
+        </div>
+
+        <div class='row'>
+
+          <div class="col-md-6">
+            <div> Description</div>
+          </div>
+          <div class="col-md-6">
+            <div id="issueDescription"> Title </div>
+          </div>
+
+        </div>
+
+        <div class='row'>
+
+          <div class="col-md-6">
+            <div> Created At </div>
+          </div>
+          <div class="col-md-6">
+            <div id="issueTime"> Title </div>
+          </div>
+
+        </div>
+
+
+
       </div>
+
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
