@@ -1,22 +1,19 @@
 //captures state of issues being displayed
 var params={
-  data: {},
-  displayedData:{},
-  page: 0,
+  data: {}, //all issues currently stored in memory
+  displayedData:{}, //up to 10 issues displayed by page currently
+  page: 0, //current page where each page is a set of at most 10 issues
   rowsPerPage: 10,
-  filter:"",
-  order:"",
-  low:0,
-  high:-1,
-  max:5,
-  owner:'walmartlabs',
-  repo:'thorax',
-  sort:'created',
-  state:'all'
+  low:0, //lowest page stored in meory
+  high:-1, //highest
+  max:10, //total number of pages possible (number of issues/10)
+  owner:'walmartlabs', //github org
+  repo:'thorax', //repo name
+  sort:'created', //default sort parameter for api
+  state:'all' //default query parameter
 };
 
 function loadData(filtered){
-
   //if filtered==true, new search paramters so have to reload all data
   if(!filtered){
     //data already in cahce
@@ -25,9 +22,8 @@ function loadData(filtered){
       return;
     }
   }
-
   //cache previous 5 pages as well
-  var newLow=Math.max(params.page-5,0);
+  var newLow=Math.floor(params.page/params.rowsPerPage);
 
   //load new data
   $.ajax({
@@ -74,10 +70,11 @@ function handleButtons(){
   buttonWrapper.html("");
 
   //display buttons for at most 5 previous pages
-  var left=Math.max(0,params.page-5);
+
 
   //calculate largest possible page given number ofissues and issues per page
-  var right=Math.min(params.page+5,params.max);
+  var right=Math.min(params.page+4,params.max);
+  var left=Math.max(params.page-4+(right-params.page),0);
 
   //check if first page button will be outputted already
   if(left!=0){
@@ -95,8 +92,8 @@ function handleButtons(){
   buttonWrapper.append(`<button value=${params.page+1} class="pageBtn btn btn-sm btn-info">Next</button>`);
 
   //check if last page is already outputted
-  if (right != 10) {
-      buttonWrapper.append(`<button value=${Math.ceil(params.data.length/params.rowsPerPage)} class="pageBtn btn btn-sm btn-info">Last &#187;</button>`);
+  if (right != params.max) {
+      buttonWrapper.append(`<button value=${Math.ceil(params.max)} class="pageBtn btn btn-sm btn-info">Last &#187;</button>`);
   }
 
   //change page number and load new data
@@ -105,8 +102,6 @@ function handleButtons(){
         loadData(false);
   });
 }
-
-
 
 function loadTable() {
     var table = $('#tableBody');
@@ -159,4 +154,4 @@ function loadTable() {
 }
 
 //initialize data
-loadData(false);
+loadData(true);
