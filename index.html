@@ -40,7 +40,26 @@
       -->
 
 
-    <table class="table table-hover table-sm" id="issueTable">
+    <table class="table table-hover" id="issueTable">
+      <form>
+        <label for="sort">Sort By:&nbsp</label>
+        <select id="sort" name="sort">
+          <option value="created">Created</option>
+          <option value="updated">Updated</option>
+          <option value="comments">Comments</option>
+        </select>
+
+        <label for="state">&nbsp&nbsp&nbspState&nbsp</label>
+        <select id="state" name="state">
+          <option value="all">All</option>
+          <option value="open">Open</option>
+          <option value="closed">Closed</option>
+        </select>
+
+        <button id="filter" type="button"><i class="fas fa-search"></i></button>
+
+      </form>
+
         <thead class="thead-dark">
             <tr>
                 <th>More Info</th>

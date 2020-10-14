@@ -8,26 +8,38 @@ var params={
   order:"",
   low:0,
   high:-1,
-  max:100
+  max:5,
+  owner:'walmartlabs',
+  repo:'thorax',
+  sort:'created',
+  state:'all'
 };
 
-function loadData(){
+function loadData(filtered){
   //data already in cahce
-  if(params.page>=params.low && params.page<=params.high){
-    loadTable();
-    return;
+  if(!filtered){
+    if(params.page>=params.low && params.page<=params.high){
+      loadTable();
+      return;
+    }
   }
 
+  //cache previous 5 pages as well
   var newLow=Math.max(params.page-5,0);
 
+  //load new data
   $.ajax({
-      url: "https://api.github.com/repos/walmartlabs/thorax/issues",
+      url: `https://api.github.com/repos/${params.owner}/${params.repo}/issues`,
       type: 'GET',
 
       data:{
         page:newLow,
+        sort:params.sort,
+        state:params.state,
+        //load at most 100 results, 10 pages total
         per_page:10*params.rowsPerPage
       },
+
       //load table asynchornously using data
       success: function(res) {
           console.log(res);
@@ -60,10 +72,10 @@ function handleButtons(){
   buttonWrapper.html("");
 
   //display buttons for at most 5 previous pages
-  var left=Math.max(0,params.page-2);
+  var left=Math.max(0,params.page-5);
 
   //calculate largest possible page given number ofissues and issues per page
-  var right=params.high;
+  var right=Math.min(params.page+5,params.max);
 
   //check if first page button will be outputted already
   if(left!=0){
@@ -88,7 +100,7 @@ function handleButtons(){
   //change page number and load new data
   $('.pageBtn').on('click', function() {
         params.page = Number($(this).val());
-        loadData();
+        loadData(false);
   });
 }
 
@@ -128,9 +140,16 @@ function loadTable() {
           $('#issueNum').html();
     });
 
+    $('#filter').on('click', function() {
+          params.sort=$('#sort').val();
+          params.state=$('#state').val();
+          params.page=1;
+          loadData(true);
+    });
+
     //change page buttons accordingly
     handleButtons();
 }
 
 //initialize data
-loadData();
+loadData(false);
