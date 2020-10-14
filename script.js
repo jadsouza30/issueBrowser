@@ -1,16 +1,15 @@
 //captures state of issues being displayed
 var params={
   data: {},
-  page: 1,
+  displayedData:{},
+  page: 0,
   rowsPerPage: 10,
   filter:"",
   order:"",
   low:0,
-  high:0,
+  high:-1,
   max:100
 };
-
-
 
 function loadData(){
   //data already in cahce
@@ -27,13 +26,14 @@ function loadData(){
 
       data:{
         page:newLow,
-        per_page:100
+        per_page:10*params.rowsPerPage
       },
       //load table asynchornously using data
       success: function(res) {
+          console.log(res);
           params.data=res;
           params.low=newLow;
-          params.high=newLow+Math.ceil(res.length/params.rowsPerPage);
+          params.high=newLow+Math.ceil(res.length/params.rowsPerPage)-1;
           loadTable();
       },
 
@@ -49,6 +49,7 @@ function getQueries(data,page,rowsPerPage){
   var end=Math.min(start+params.rowsPerPage,params.data.length);
 
   //return 10 queries for correct page
+  params.displayedData=params.data.slice(start,end);
   return params.data.slice(start,end);
 }
 
@@ -59,7 +60,7 @@ function handleButtons(){
   buttonWrapper.html("");
 
   //display buttons for at most 5 previous pages
-  var left=Math.max(0,params.page-5);
+  var left=Math.max(0,params.page-2);
 
   //calculate largest possible page given number ofissues and issues per page
   var right=params.high;
@@ -69,12 +70,18 @@ function handleButtons(){
     buttonWrapper.append(`<button value=${0} class="pageBtn btn btn-sm btn-info">&#171; First</button>`);
   }
 
+  if(params.page!=0){
+    buttonWrapper.append(`<button value=${params.page-1} class="pageBtn btn btn-sm btn-info">Prev</button>`);
+  }
+
   for(var i=left;i<=right;i++){
     buttonWrapper.append(`<button value=${i} class="pageBtn btn btn-sm btn-info">${i+1}</button>`);
   }
 
+  buttonWrapper.append(`<button value=${params.page+1} class="pageBtn btn btn-sm btn-info">Next</button>`);
+
   //check if last page is already outputted
-  if (right != params.max) {
+  if (right != 10) {
       buttonWrapper.append(`<button value=${Math.ceil(params.data.length/params.rowsPerPage)} class="pageBtn btn btn-sm btn-info">Last &#187;</button>`);
   }
 
@@ -103,7 +110,10 @@ function loadTable() {
         //output data members of each issue object
 
         var row = `<tr>
-                  <td>${newQueries[i].number}</td>
+                  <td>
+                    <button class="issueSelector btn btn-rounded btn-success"><i class="fas fa-plus pl-1"></i></button>
+                  </td>
+                  <td>${newQueries[i].number}&nbsp</td>
                   <td>${newQueries[i].user.login}</td>
                   <td>${newQueries[i].title}</td>
                   <td>${newQueries[i].state}</td>
@@ -112,13 +122,14 @@ function loadTable() {
         table.append(row);
     }
 
+    $('.issueSelector').on('click', function() {
+          $('#myModal').modal('show');
+          var issue=displayedData[$(this).val()];
+          $('#issueNum').html();
+    });
+
     //change page buttons accordingly
     handleButtons();
-
-    $(document).ready(function () {
-      $('#issueTable').DataTable();
-      $('.dataTables_length').addClass('bs-select');
-    });
 }
 
 //initialize data

@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
 <script src="script.js"></script>
 <link rel="stylesheet" href="style.css">
 
@@ -9,9 +10,40 @@
 </div>
 <div class="container ">
     <!-- Table structure here -->
-    <table class="table" id="issueTable">
+
+    <!-- Filter bar
+
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">State
+        <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+          <input class="form-control" id="myInput" type="text" placeholder="Search..">
+          <li><a href="#">Created</a></li>
+          <li><a href="#">Updated</a></li>
+          <li><a href="#">Comments</a></li>
+        </ul>
+      </div>
+
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Sort By
+        <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+          <input class="form-control" id="myInput" type="text" placeholder="Search..">
+          <li><a href="#">Created</a></li>
+          <li><a href="#">Updated</a></li>
+          <li><a href="#">Comments</a></li>
+        </ul>
+      </div>
+
+      <i class="fas fa-search"></i>
+
+      -->
+
+
+    <table class="table table-hover table-sm" id="issueTable">
         <thead class="thead-dark">
             <tr>
+                <th>More Info</th>
                 <th>Number</th>
                 <th>User</th>
                 <th>Title</th>
@@ -26,6 +58,28 @@
 
 <div class="container justify-content-center">
     <div id="buttonWrapper"></div>
+</div>
+
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <p id="issueNum"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <script type="text/javascript">
